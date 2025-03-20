@@ -14,15 +14,12 @@ export default function DetectorPage() {
   const [detections, setDetections] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
-
-  // Handle auth state and redirects
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       router.replace('/auth/signin')
     }
   }, [loading, isAuthenticated, router])
 
-  // Load detections when authenticated
   useEffect(() => {
     if (isAuthenticated) {
       loadDetections()

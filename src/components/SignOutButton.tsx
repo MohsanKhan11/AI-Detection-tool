@@ -14,7 +14,6 @@ export default function SignOutButton() {
     setIsLoading(true)
     try {
       await signOut()
-      // Clear auth state
       setUser(null)
       setIsAuthenticated(false)
       router.push('/auth/signin')

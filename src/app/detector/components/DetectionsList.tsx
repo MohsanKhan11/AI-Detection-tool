@@ -36,7 +36,7 @@ export default function DetectionsList({ detections, onDelete }: DetectionsListP
                       detection.aiScore > 0.7 ? 'text-red-400' : 'text-green-400'
                     }`}
                   >
-                    {Math.round(detection.aiScore * 100)}%
+                    {Math.round(detection.aiScore)}%
                   </span>
                 </div>
                 <span className="text-sm text-gray-400">
