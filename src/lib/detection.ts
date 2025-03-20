@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 const UNDETECTABLE_API_KEY = process.env.UNDETECTABLE_API_KEY
-const UNDETECTABLE_API_URL = process.env.NEXT_PUBLIC_UNDETECTABLE_API_URL!
-const maxAttempts = Number(process.env.NEXT_PUBLIC_MAX_DETECTION_ATTEMPTS) || 10
-const delayMs = Number(process.env.NEXT_PUBLIC_DETECTION_DELAY_MS) || 1000
+const UNDETECTABLE_API_URL = process.env.NEXT_UNDETECTABLE_API_URL!
+const maxAttempts = Number(process.env.NEXT_MAX_DETECTION_ATTEMPTS) || 10
+const delayMs = Number(process.env.NEXT_DETECTION_DELAY_MS) || 1000
 
 const undetectableApi = axios.create({
   baseURL: UNDETECTABLE_API_URL.replace('/detect', ''),

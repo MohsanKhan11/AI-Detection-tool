@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn } from '@/app/actions/auth'
+import { useAuthStore } from '@/store/authStore'
 
 export default function SignInForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const { setUser, setIsAuthenticated } = useAuthStore()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -21,10 +23,14 @@ export default function SignInForm() {
     try {
       const response = await signIn(email, password)
       if (response.success) {
+        setUser(response.user)
+        setIsAuthenticated(true)
         router.push('/detector')
       }
     } catch (err: any) {
       setError(err.message || 'Invalid credentials')
+      setUser(null)
+      setIsAuthenticated(false)
     } finally {
       setIsLoading(false)
     }

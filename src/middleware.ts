@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const protectedRoutes = ['/detector']
-
 const authRoutes = ['/auth/signin', '/auth/signup']
 
 export async function middleware(request: NextRequest) {
@@ -46,23 +45,27 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { session } } = await supabase.auth.getSession()
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
 
-  if (protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
-    if (!session) {
-      const redirectUrl = new URL('/auth/signin', request.url)
-      redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname)
-      return NextResponse.redirect(redirectUrl)
+    if (protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
+      if (!session) {
+        const redirectUrl = new URL('/auth/signin', request.url)
+        redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname)
+        return NextResponse.redirect(redirectUrl)
+      }
     }
-  }
 
-  if (authRoutes.includes(request.nextUrl.pathname)) {
-    if (session) {
-      return NextResponse.redirect(new URL('/detector', request.url))
+    if (authRoutes.includes(request.nextUrl.pathname)) {
+      if (session) {
+        return NextResponse.redirect(new URL('/detector', request.url))
+      }
     }
-  }
 
-  return response
+    return response
+  } catch (error) {
+    return response
+  }
 }
 
 export const config = {

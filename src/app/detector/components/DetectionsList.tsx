@@ -13,7 +13,7 @@ interface DetectionsListProps {
 }
 
 export default function DetectionsList({ detections, onDelete }: DetectionsListProps) {
-  if (!detections.length) {
+  if (!detections?.length) {
     return (
       <div className="text-gray-400 text-center py-8">
         No detections yet. Try analyzing some text!

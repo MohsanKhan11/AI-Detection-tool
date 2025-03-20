@@ -2,7 +2,7 @@ import qs from 'qs'
 import axios from 'axios'
 import type { AxiosRequestConfig } from 'axios'
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL
+const STRAPI_URL = process.env.NEXT_STRAPI_URL
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN
 
 const strapiApi = axios.create({

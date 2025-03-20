@@ -3,15 +3,20 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/actions/auth'
+import { useAuthStore } from '@/store/authStore'
 
 export default function SignOutButton() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const { setUser, setIsAuthenticated } = useAuthStore()
 
   const handleSignOut = async () => {
     setIsLoading(true)
     try {
       await signOut()
+      // Clear auth state
+      setUser(null)
+      setIsAuthenticated(false)
       router.push('/auth/signin')
     } catch (error) {
       console.error('Error signing out:', error)

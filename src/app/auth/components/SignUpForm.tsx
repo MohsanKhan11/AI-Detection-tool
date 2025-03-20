@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { signUp } from '@/app/actions/auth'
+import { signUp, signIn } from '@/app/actions/auth'
+import { useAuthStore } from '@/store/authStore'
 
 export default function SignUpForm() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const { setUser, setIsAuthenticated } = useAuthStore()
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -15,7 +17,7 @@ export default function SignUpForm() {
     setError('')
 
     const formData = new FormData(e.currentTarget)
-    const username = formData.get('username') as string
+    const email = formData.get('email') as string
     const password = formData.get('password') as string
     const confirmPassword = formData.get('confirmPassword') as string
 
@@ -26,10 +28,18 @@ export default function SignUpForm() {
     }
 
     try {
-      await signUp(username, password)
-      router.push('/auth/signin')
+      await signUp(email, password)
+      
+      const response = await signIn(email, password)
+      if (response.success) {
+        setUser(response.user)
+        setIsAuthenticated(true)
+        router.push('/detector')
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to create account')
+      setUser(null)
+      setIsAuthenticated(false)
     } finally {
       setIsLoading(false)
     }
@@ -44,13 +54,13 @@ export default function SignUpForm() {
       )}
       
       <div>
-        <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">
-          Username
+        <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+          Email
         </label>
         <input
-          id="username"
-          name="username"
-          type="text"
+          id="email"
+          name="email"
+          type="email"
           required
           className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
